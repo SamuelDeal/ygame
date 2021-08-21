@@ -1,0 +1,15 @@
+client/Cargo.lock
+client/target
+game/Cargo.lock
+game/target
+protocol/Cargo.lock
+protocol/target
+server/target
+server/static/wasm
+
+misc/ygame.nginx.conf
+docs/wip
+Dockerfile_bloat
+
+target
+

@@ -1,0 +1,94 @@
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+
+[config]
+default_to_workspace = false
+
+[tasks.install-wasm32-target]
+description = "Install the rust wasm32-unknown-unknown target"
+script_runner = "@duckscript"
+script = '''
+out = exec --fail-on-error "rustup" "target" "list" "--installed"
+if not contains ${out.stdout} "wasm32-unknown-unknown"
+  exec --fail-on-error rustup target add wasm32-unknown-unknown
+end
+'''
+
+[tasks.install-wasm-bindgen]
+description = "Install the wasm-bindgen tool"
+dependencies = ["install-wasm32-target"]
+install_crate = { crate_name  = "wasm-bindgen-cli", binary = "wasm-bindgen", test_arg = ["-V"] }
+
+[tasks.install-clippy]
+description = "Install the rust clippy tool"
+install_crate = { rustup_component_name = "clippy" }
+
+[tasks.install-toolchain]
+description = "Install the wasm toolchains and tools"
+dependencies = ["install-wasm-bindgen"]
+
+[tasks.remove-toolchain]
+description = "Remove the wasm toolchains and tools"
+script_runner = "@duckscript"
+script = '''
+out = which "wasm-bindgen"
+if not is_empty ${out}
+  exec --fail-on-error cargo uninstall wasm-bindgen-cli
+end
+out = exec --fail-on-error "rustup" "target" "list" "--installed"
+if contains ${out.stdout} "wasm32-unknown-unknown"
+  exec --fail-on-error rustup target remove wasm32-unknown-unknown
+end
+'''
+
+
+[tasks.compile-wasm-debug]
+description = "Compile the wasm binary"
+command = "cargo"
+args = ["build", "-p", "ygame-client", "--target=wasm32-unknown-unknown"]
+dependencies = ["install-wasm-bindgen"]
+
+[tasks.compile-wasm-release]
+description = "Compile the wasm binary"
+command = "cargo"
+args = ["build", "-p", "ygame-client", "--target=wasm32-unknown-unknown", "--release"]
+dependencies = ["install-wasm-bindgen"]
+
+[tasks.client-debug]
+description = "Compile and deploy the wasm binary"
+command = "wasm-bindgen"
+args = ["--target=web", "--debug", "--out-dir=server/static/wasm", "target/wasm32-unknown-unknown/debug/ygame_client.wasm"]
+dependencies = ["compile-wasm-debug"]
+
+[tasks.client-release]
+description = "Compile and deploy the wasm binary"
+command = "wasm-bindgen"
+args = ["--target=web", "--out-dir=server/static/wasm", "target/wasm32-unknown-unknown/release/ygame_client.wasm"]
+dependencies = ["compile-wasm-release"]
+
+[tasks.server-debug]
+description = "Compile and deploy the server binary"
+command = "cargo"
+args = ["build", "--workspace", "--exclude", "ygame_client"]
+
+[tasks.server-release]
+description = "Compile and deploy the server binary"
+command = "cargo"
+args = ["build", "--workspace", "--exclude", "ygame_client", "--release"]
+
+[tasks.client]
+dependencies = ["client-debug"]
+
+[tasks.server]
+dependencies = ["server-debug"]
+
+[tasks.build]
+command = "cargo"
+args = ["build"]
+dependencies = ["client-debug"]
+
+[tasks.clippy]
+command = "cargo"
+args = ["clippy"]
+dependencies = ["install-clippy"]
+

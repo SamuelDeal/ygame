@@ -1,0 +1,7 @@
+.git
+target
+server/static/wasm
+docs/
+misc/ygame.nginx.conf
+misc/ygame.nginx.template.conf
+

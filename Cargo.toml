@@ -1,0 +1,11 @@
+[workspace]
+members = [
+  "server/",
+  "client/",
+  "protocol/",
+  "game/",
+]
+
+[profile.release.package.ygame-client]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"

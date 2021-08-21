@@ -1,0 +1,100 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Jeu d'Ybo N°1</title>
+
+    <!-- Change path to resources here if you want to use a subfolder -->
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/vanilla.css" />
+    <link rel="stylesheet" href="/css/normform.min.css" />
+    <link rel="stylesheet" href="/css/ygame.css" />
+    <script type="module" lang="javascript" src="/client.js"></script>
+</head>
+
+<body>
+    <h1 id="title">Bienvenu dans le jeu d'Ybo</h1>
+    <section id="error_section" hidden="">
+        <div id="error_div"></div>
+    </section>
+    <section id="connection_section">
+        <div class="connection">
+            <div id="connection_label" class="label">Loading</div>
+            <div id="connection_spinner">
+                <div class="lds-ellipsis">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+    <section id="login_user_section">
+        <section id="new_user_section" hidden="">
+            <form id="new_user_form" action="javascript:void(0);" class="normform">
+                <fieldset>
+                    <legend>Bienvenu nouveau joueur:</legend>
+                    <label for="login">Nom du joueur:</label><input type="text" name="login" id="login" required />
+                    <div class="inline-buttons2">
+                        <input id="save_login_btn" type="submit" value="Entrer dans le jeu" />
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+        <section id="existing_user_section" hidden="">
+            <form id="existing_user_form" action="javascript:void(0);" class="normform">
+                <fieldset>
+                    <legend>Bon retour <span class="user_name">Anonymous</span></legend>
+                    <label>Bon retour parmi nous <span class="user_name">Anonymous</span></label>
+                    <div class="inline-buttons2">
+                        <input id="invalidate_existing_user_btn" type="reset" value="Je ne suis pas Anonymous" />
+                        <input id="validate_existing_user_btn" type="submit" value="Entrer dans le jeu" />
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+        <section id="choose_conn_section" hidden="">
+            <form id="choose_conn_form" action="javascript:void(0);" class="normform">
+                <fieldset>
+                    <legend>Type de partie</legend>
+                    <label>Souhaitez vous jouer à deux en local ou bien par internet ?</label>
+                    <div class="inline-buttons2">
+                        <input id="online_game_btn" type="submit" value="Jouer en ligne" />
+                        <input id="local_game_btn" type="submit" value="Jouer à 2" />
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+        <section id="opponent_section" hidden="">
+            <form id="opponent_form" action="javascript:void(0);" class="normform">
+                <fieldset>
+                    <legend>Nom du deuxième joueur</button></legend>
+                    <label for="opponent">Nom du second joueur:</label><input type="text" name="opponent" id="opponent"
+                        required />
+                    <div class="inline-buttons2">
+                        <input id="save_opponent_btn" type="submit" value="Commencer la partie" />
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+    </section>
+    <section id="lobby_section" hidden="">
+        <form id="lobby_form" action="javascript:void(0);" class="normform">
+            <fieldset>
+                <legend>Liste des parties en cours:</legend>
+                <ul id="game_list">
+                </ul>
+                <div class="inline-buttons2">
+                    <input id="join_game" type="submit" value="Rejoindre" />
+                    <input id="create_game" type="submit" value="Créer une partie" />
+                </div>
+            </fieldset>
+        </form>
+    </section>
+    <section id="game_section" hidden="">
+    </section>
+</body>
+
+</html>

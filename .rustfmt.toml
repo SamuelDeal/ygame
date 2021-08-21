@@ -1,0 +1,9 @@
+hard_tabs = true
+max_width = 120
+newline_style = "Unix"
+
+# Activate when they will be stabilized
+#control_brace_style = "ClosingNextLine"
+#group_imports = "StdExternalCrate"
+#trailing_comma = "Never"
+#where_single_line = true

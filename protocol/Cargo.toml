@@ -1,0 +1,18 @@
+[package]
+name = "ygame-protocol"
+version = "0.1.0"
+edition = "2018"
+authors = ["Sam"]
+description = """
+Ybo first board game, communication protocol
+"""
+readme = "../README.md"
+keywords = ["game", "web", "lib"]
+license = "GPL-3"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ygame-game = { version = "0.1.0", path = "../game" }
+
+serde = { version = "1.0", features = ["derive"] }

@@ -1,0 +1,35 @@
+FROM rust:1.55-slim-bullseye as builder
+
+# Install build dependencies
+RUN apt-get update
+RUN apt-get -y install pkg-config openssl libssl-dev
+RUN USER=root rustup target add wasm32-unknown-unknown
+RUN USER=root cargo install -f wasm-bindgen-cli
+RUN mkdir /ygame/
+
+# Copy Files
+WORKDIR /ygame/
+COPY ./misc/Cargo.client.toml /ygame/Cargo.toml
+COPY ./client/Cargo.toml /ygame/client/
+COPY ./client/src/ /ygame/client/src/
+COPY ./game/Cargo.toml /ygame/game/
+COPY ./game/src/ /ygame/game/src/
+COPY ./protocol/Cargo.toml /ygame/protocol/
+COPY ./protocol/src/ /ygame/protocol/src/
+
+# Build the project
+RUN cargo build -p ygame-client --target=wasm32-unknown-unknown --release
+RUN wasm-bindgen --target=web --out-dir=/ygame/target_wasm target/wasm32-unknown-unknown/release/ygame_client.wasm
+
+
+# Nginx image using built artifacts
+FROM nginx:stable
+
+RUN mkdir -p /usr/local/ygame/wasm
+COPY ./misc/ygame.nginx.docker.conf /etc/nginx/conf.d/default.conf
+COPY ./server/static/ /usr/local/ygame/
+COPY --from=builder /ygame/target_wasm/ /usr/local/ygame/wasm/
+RUN chown -R nginx:nginx /usr/local/ygame
+
+CMD ["nginx", "-g", "daemon off;"]
+
